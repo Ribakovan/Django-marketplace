@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Сообщения
+{% endblock %}
+
+{% block content %}
+<div class="w-1/2 mx-auto">
+    <h1 class="mb-6 text-3xl ">
+        Избранное
+    </h1>
+    <div class="space-y-6">
+        {% for product in favorite_products %}
+        <a href="{% url 'core:product-detail' product.id %}">
+            <div class="my-4 p-6 flex bg-gray-100 rounded-xl">
+                <div class="pr-6">
+                    <img src="{{ product.image.url }}" class="w-24 rounded-xl">
+                </div>
+                <div class="text-lg font-semibold">
+                    <p>{{ product.name }}</p>
+                    <hr>
+                    <p>{{ product.price }}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

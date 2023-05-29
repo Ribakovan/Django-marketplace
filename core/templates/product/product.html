@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="grid grid-cols-5 gap-6">
+    <div class="col-span-3">
+        <img src="{{ product.image.url }}" class="w-full h-full rounded-xl">
+    </div>
+    <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl flex items-center">
+            {{ product.name }}
+            <a href="{% url 'core:favourite' product.id %}" class="p-3">
+                {% if is_favourite %}
+                <img src="{% static 'img/liked.png' %}" class="w-6 h-6">
+                {% else %}
+                <img src="{% static 'img/not_liked.png' %}" class="w-6 h-6">
+                {% endif %}
+            </a>
+        </h1>
+        <p class="text-gray-500">
+            <strong>
+                Цена:
+            </strong>
+            {{ product.price }}
+        </p>
+        <p class="text-gray-500">
+            <strong>
+                Город:
+            </strong>
+            {{ product.city }}
+        </p>
+        <p class="text-gray-500">
+            <strong>
+                Продавец:
+            </strong>
+            {{ product.created_by.username }}
+        </p>
+        {% if product.description %}
+        <p class="text-gray-700">
+            <strong class="text-gray-500">
+                Описание:
+            </strong><br>
+            {{ product.description }}
+        </p>
+        {% endif %}
+        {% if request.user == product.created_by %}
+        <div class="mt-6 p-6 bg-white rounded-xl">
+            <p>
+                Это ваш продукт
+            </p>
+            <a href="{% url 'core:edit-product' product.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">
+                Редактировать
+            </a>
+            <a href="{% url 'core:delete-product' product.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">
+                Удалить
+            </a>
+        </div>
+        {% else %}
+        <a href="{% url 'core:new-conversation' product.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">
+            Написать
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% if related_products %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">
+        Похожие товары
+    </h2>
+    <div class="grid grid-cols-3 gap-3">
+        {% for product in related_products %}
+        <div>
+            <a href="{% url 'core:product-detail' product.id %}">
+                <div>
+                    <img src="{{ product.image.url }}" class="w-full h-52 rounded-t-xl">
+                </div>
+                <div class="flex justify-between items-center p-6 bg-white rounded-b-xl">
+                    <div class="">
+                        <h2 class="text-2xl">
+                            {{ product.name }}
+                        </h2>
+                        <p class="text-gray-500">
+                            Price: {{ product.price }}
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

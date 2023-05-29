@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Продукты
+{% endblock %}
+
+{% block content %}
+<div class="p-3 pg-6 grid grid-cols-4 gap-4 bg-gray-100 rounded-xl">
+    <div class="col-span-1">
+        <form method="get" action="{% url 'core:products' %}">
+            <input name="query" class="mb-4 w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Поиск...">
+            <hr>
+            <label class="font-semibold">Category</label>
+            <select class="mb-4 w-full py-4 px-6 border rounded-xl" name="category_id">
+                <option value="0" selected>
+                    Все категории
+                </option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == category_id %}selected{% endif %}>
+                    {{ category }}
+                </option>
+                {% endfor %}
+            </select>
+            <hr>
+            <label class="font-semibold">City</label>
+            <select class="mb-4 w-full py-4 px-6 border rounded-xl" name="city_id">
+                <option value="0" selected>
+                    Все города
+                </option>
+                {% for city in cities %}
+                <option value="{{ city.id }}" {% if city.id == city_id %}selected{% endif %}>
+                    {{ city }}
+                </option>
+                {% endfor %}
+            </select>
+            <button class="w-36 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">
+                Поиск
+            </button>
+        </form>
+        <hr class="my-6">
+        <p class="font-semibold">
+            Очистить фильтры
+        </p>
+        <ul>
+            <li>
+                <a href="{% url 'core:products' %}" class="w-36 mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white">
+                    Очистить
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-span-3">
+        <div class="grid grid-cols-3 gap-3">
+            {% load static %}
+            {% for product in products %}
+            <a href="{% url 'core:product-detail' product.id %}">
+                <div>
+                    <div>
+                        <img src="{{ product.image.url }}" class="w-full h-40 rounded-t-xl">
+                    </div>
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">
+                            {{ product.name }}
+<!--                            <a href="{% url 'core:favourite' product.id %}" class="p-3">-->
+<!--                                {% if is_favourite %}-->
+<!--                                <img src="{% static 'img/liked.png' %}" class="w-6 h-6">-->
+<!--                                {% else %}-->
+<!--                                <img src="{% static 'img/not_liked.png' %}" class="w-6 h-6">-->
+<!--                                {% endif %}-->
+<!--                            </a>-->
+                        </h2>
+                        <p class="text-gray-500">
+                            Price: {{ product.price }}
+                        </p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

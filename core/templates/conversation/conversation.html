@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Диалог
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 p-6 w-1/2 mx-auto rounded-xl">
+    <h1 class="mb-6 text-3xl ">
+        Диалог
+    </h1>
+    {% for message in conversation.messages.all %}
+    <div class="flex justify-end flex-col self-end">
+        {% if message.created_by == request.user %}
+        <div class="inline-flex flex-row-reverse">
+            <div class="flex items-center">
+                <div class="min-w-60 max-w-700 p-4 my-4 bg-blue-100 self-end rounded-xl">
+                    <div>
+                        <strong>
+                            {{ message.created_by.username }}
+                        </strong>
+                        @ {{ message.created_at }}
+                    </div>
+                    {{ message.content }}
+                </div>
+                {% if request.user %}
+                <img src="{{ request.user.profile.avatar.url }}" class="ml-6 h-16 w-16 rounded-full">
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="inline-flex">
+            <div class="flex items-center">
+                {% if message.created_by.profile %}
+                <img src="{{ message.created_by.profile.avatar.url }}" class="mr-6 h-16 w-16 rounded-full">
+                {% endif %}
+                <div class="min-w-60 max-w-700 p-4 my-4 bg-blue-100 border self-start rounded-xl">
+                    <div>
+                        <strong>
+                            {{ message.created_by.username }}
+                        </strong>
+                        @ {{ message.created_at }}
+                    </div>
+                    {{ message.content }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <form method="post" class="mt-6">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="mt-2 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">
+            Отправить
+        </button>
+    </form>
+</div>
+{% endblock %}

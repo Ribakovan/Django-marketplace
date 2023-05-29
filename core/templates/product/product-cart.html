@@ -1,0 +1,21 @@
+{% load static %}
+{% for product in products %}
+<div>
+    <a href="{% url 'core:product-detail' product.id %}">
+        <div>
+            <img src="{{ product.image.url }}" class="w-full h-{{ height }} rounded-t-xl">
+        </div>
+        <div class="flex justify-between">
+            <div class="p-6 bg-white rounded-b-xl">
+                <h2 class="text-2xl">
+                    {{ product.name }}
+                </h2>
+                <p class="text-gray-500">
+                    Price: {{ product.price }}
+                </p>
+            </div>
+
+        </div>
+    </a>
+</div>
+{% endfor %}
