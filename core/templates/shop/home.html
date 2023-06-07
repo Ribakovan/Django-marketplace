@@ -15,7 +15,11 @@
         <div>
             <a href="{% url 'core:product-detail' product.id %}">
                 <div>
+                    {% if product.image %}
                     <img src="{{ product.image.url }}" class="w-full h-52 rounded-t-xl">
+                    {% else %}
+                    <img src="{% static 'img/not_photo.jpg' %}" class="w-full h-52 rounded-t-xl">
+                    {% endif %}
                 </div>
                 <div class="p-6 bg-white rounded-b-xl">
                     <h2 class="text-2xl">

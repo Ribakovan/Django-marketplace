@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from core.product.models import City
 from .models import Product, Category
 from .forms import NewProductForm, EditProductForm
@@ -89,6 +90,10 @@ class Products(View):
         categories = Category.objects.all()
         cities = City.objects.all()
         products = Product.objects.filter(is_sold=False)
+        user = User.objects.get(id=request.user.id)
+        if user:
+            favourite_products = user.favourite.all()
+            print(favourite_products)
         if query:
             products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
         if city_id:
@@ -102,7 +107,8 @@ class Products(View):
             'cities': cities,
             'category_id': int(category_id),
             'city_id': int(city_id),
-            'query': query
+            'query': query,
+            'favourite_products': favourite_products
         })
 
 

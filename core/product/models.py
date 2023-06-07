@@ -22,6 +22,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name = 'Город'
+        verbose_name_plural = 'Города'
 
 
 class Product(models.Model):
