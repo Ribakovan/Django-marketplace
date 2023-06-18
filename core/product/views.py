@@ -90,10 +90,13 @@ class Products(View):
         categories = Category.objects.all()
         cities = City.objects.all()
         products = Product.objects.filter(is_sold=False)
-        user = User.objects.get(id=request.user.id)
-        if user:
+        user = request.user
+        print(str(user), type(user))
+        if user.is_authenticated:
             favourite_products = user.favourite.all()
             print(favourite_products)
+        else:
+            favourite_products = []
         if query:
             products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
         if city_id:
